@@ -33,11 +33,21 @@ export class DatepickerOverviewExample implements OnChanges {
   }
 
   onSave($event: any) {
-    Object.keys(this.form.value).forEach(c => {
-      console.log(this.form.get("expiry_date").value);
+      let time = this.form.get("expiry_date").value;
+      let date = this.adjustDate(this.form.get("expiry_date").value);
 
-      console.log(this.form[c]);
-    });
+        console.log(time);
+        console.log(date);
+
+  }
+    private adjustDate(ds: string): string {
+    // ds is an iso string in Zulu time
+    const tz_adj = new Date().getTimezoneOffset(); // the locale timezone offset
+    const ts_adj = Date.parse(ds) - tz_adj * 60 * 1000;
+
+    const d = new Date(ts_adj);
+    // output is just the date
+    return d.toISOString().split("T")[0];
   }
 }
 
